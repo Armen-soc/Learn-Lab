@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #1a1a1a;
+  --ink-muted: #666666;
+  --bg: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --border: #e0e0e0;
+  --accent: #0066cc;
+  --accent-light: #e6f2ff;
+  --radius: 8px;
+  --spacing: 1rem;
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-colors;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1 text-sm;
+  }
+
+  .card {
+    @apply bg-white border border-gray-200 rounded-lg p-6 mb-6;
+  }
+
+  .card-title {
+    @apply text-lg font-semibold mb-4 text-gray-900;
+  }
+
+  .progress-bar {
+    @apply w-full bg-gray-200 rounded-full h-2 overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply bg-blue-600 h-full rounded-full transition-all;
+  }
+
+  .form-group {
+    @apply mb-4;
+  }
+
+  .form-group label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600;
+  }
+
+  .badge {
+    @apply inline-block px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .badge-easy {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .badge-medium {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-hard {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .toast {
+    @apply fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg text-white hidden;
+  }
+
+  .toast.show {
+    @apply block;
+  }
+
+  .toast.success {
+    @apply bg-green-600;
+  }
+
+  .toast.error {
+    @apply bg-red-600;
+  }
+
+  .toast.warning {
+    @apply bg-yellow-600;
+  }
+}

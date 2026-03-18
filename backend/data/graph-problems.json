@@ -1,0 +1,344 @@
+{
+  "problems": [
+    {
+      "id": "graph_001",
+      "title": "Graph Traversal - BFS",
+      "description": "Given an undirected graph, return the BFS traversal starting from node 0",
+      "difficulty": "easy",
+      "timeLimit": 1000,
+      "memoryLimit": 128,
+      "testCases": [
+        {
+          "id": 1,
+          "input": {
+            "nodes": 4,
+            "edges": [[0, 1], [0, 2], [1, 2], [2, 3]],
+            "startNode": 0
+          },
+          "output": [0, 1, 2, 3],
+          "description": "Simple connected graph BFS"
+        },
+        {
+          "id": 2,
+          "input": {
+            "nodes": 5,
+            "edges": [[0, 1], [1, 2], [2, 3], [3, 4]],
+            "startNode": 0
+          },
+          "output": [0, 1, 2, 3, 4],
+          "description": "Linear graph BFS"
+        },
+        {
+          "id": 3,
+          "input": {
+            "nodes": 5,
+            "edges": [[0, 1], [0, 2], [1, 3], [2, 4]],
+            "startNode": 0
+          },
+          "output": [0, 1, 2, 3, 4],
+          "description": "Tree-like BFS"
+        },
+        {
+          "id": 4,
+          "input": {
+            "nodes": 1,
+            "edges": [],
+            "startNode": 0
+          },
+          "output": [0],
+          "description": "Single node"
+        },
+        {
+          "id": 5,
+          "input": {
+            "nodes": 6,
+            "edges": [[0, 1], [0, 2], [1, 3], [2, 4], [3, 5], [4, 5]],
+            "startNode": 0
+          },
+          "output": [0, 1, 2, 3, 4, 5],
+          "description": "Complex graph with cycles"
+        }
+      ]
+    },
+    {
+      "id": "graph_002",
+      "title": "Shortest Path - Dijkstra",
+      "description": "Find shortest path from source to all nodes using Dijkstra's algorithm",
+      "difficulty": "medium",
+      "timeLimit": 2000,
+      "memoryLimit": 256,
+      "testCases": [
+        {
+          "id": 1,
+          "input": {
+            "nodes": 4,
+            "edges": [[0, 1, 1], [0, 2, 4], [1, 2, 2], [1, 3, 5], [2, 3, 1]],
+            "source": 0
+          },
+          "output": [0, 1, 3, 4],
+          "description": "Simple weighted graph"
+        },
+        {
+          "id": 2,
+          "input": {
+            "nodes": 5,
+            "edges": [[0, 1, 4], [0, 2, 2], [1, 2, 1], [1, 3, 5], [2, 3, 8], [2, 4, 10], [3, 4, 2]],
+            "source": 0
+          },
+          "output": [0, 3, 2, 10, 12],
+          "description": "More complex weighted graph"
+        },
+        {
+          "id": 3,
+          "input": {
+            "nodes": 3,
+            "edges": [[0, 1, 1], [1, 2, 1]],
+            "source": 0
+          },
+          "output": [0, 1, 2],
+          "description": "Linear weighted path"
+        },
+        {
+          "id": 4,
+          "input": {
+            "nodes": 4,
+            "edges": [[0, 1, 10], [0, 2, 1], [1, 3, 1], [2, 1, 1]],
+            "source": 0
+          },
+          "output": [0, 2, 1, 3],
+          "description": "Multiple paths with different weights"
+        },
+        {
+          "id": 5,
+          "input": {
+            "nodes": 6,
+            "edges": [[0, 1, 7], [0, 2, 9], [0, 5, 14], [1, 2, 10], [1, 3, 15], [2, 3, 11], [2, 5, 2], [3, 4, 6], [4, 5, 9]],
+            "source": 0
+          },
+          "output": [0, 7, 9, 20, 20, 11],
+          "description": "Complex weighted graph"
+        }
+      ]
+    },
+    {
+      "id": "graph_003",
+      "title": "Detect Cycle in Graph",
+      "description": "Determine if an undirected graph contains a cycle",
+      "difficulty": "medium",
+      "timeLimit": 1500,
+      "memoryLimit": 128,
+      "testCases": [
+        {
+          "id": 1,
+          "input": {
+            "nodes": 3,
+            "edges": [[0, 1], [1, 2]]
+          },
+          "output": "No",
+          "description": "Linear graph without cycle"
+        },
+        {
+          "id": 2,
+          "input": {
+            "nodes": 3,
+            "edges": [[0, 1], [1, 2], [2, 0]]
+          },
+          "output": "Yes",
+          "description": "Triangle with cycle"
+        },
+        {
+          "id": 3,
+          "input": {
+            "nodes": 4,
+            "edges": [[0, 1], [1, 2], [2, 3]]
+          },
+          "output": "No",
+          "description": "Linear 4 node graph"
+        },
+        {
+          "id": 4,
+          "input": {
+            "nodes": 4,
+            "edges": [[0, 1], [1, 2], [2, 3], [3, 0]]
+          },
+          "output": "Yes",
+          "description": "Square with cycle"
+        },
+        {
+          "id": 5,
+          "input": {
+            "nodes": 5,
+            "edges": [[0, 1], [0, 2], [1, 3], [2, 4]]
+          },
+          "output": "No",
+          "description": "Tree structure"
+        }
+      ]
+    },
+    {
+      "id": "graph_004",
+      "title": "Connected Components",
+      "description": "Find the number of connected components in an undirected graph",
+      "difficulty": "medium",
+      "timeLimit": 1500,
+      "memoryLimit": 128,
+      "testCases": [
+        {
+          "id": 1,
+          "input": {
+            "nodes": 5,
+            "edges": [[0, 1], [1, 2], [3, 4]]
+          },
+          "output": 2,
+          "description": "Two connected components"
+        },
+        {
+          "id": 2,
+          "input": {
+            "nodes": 6,
+            "edges": [[0, 1], [2, 3], [4, 5]]
+          },
+          "output": 3,
+          "description": "Three connected components"
+        },
+        {
+          "id": 3,
+          "input": {
+            "nodes": 4,
+            "edges": [[0, 1], [1, 2], [2, 3]]
+          },
+          "output": 1,
+          "description": "Fully connected graph"
+        },
+        {
+          "id": 4,
+          "input": {
+            "nodes": 5,
+            "edges": []
+          },
+          "output": 5,
+          "description": "No edges - isolated nodes"
+        },
+        {
+          "id": 5,
+          "input": {
+            "nodes": 7,
+            "edges": [[0, 1], [1, 2], [3, 4], [5, 6]]
+          },
+          "output": 3,
+          "description": "Mixed components"
+        }
+      ]
+    },
+    {
+      "id": "graph_005",
+      "title": "Topological Sort",
+      "description": "Return topological sort of a directed acyclic graph (DAG)",
+      "difficulty": "medium",
+      "timeLimit": 2000,
+      "memoryLimit": 256,
+      "testCases": [
+        {
+          "id": 1,
+          "input": {
+            "nodes": 4,
+            "edges": [[0, 1], [0, 2], [1, 3], [2, 3]]
+          },
+          "output": [0, 1, 2, 3],
+          "description": "Simple DAG"
+        },
+        {
+          "id": 2,
+          "input": {
+            "nodes": 3,
+            "edges": [[0, 1], [0, 2]]
+          },
+          "output": [0, 1, 2],
+          "description": "Star topology"
+        },
+        {
+          "id": 3,
+          "input": {
+            "nodes": 5,
+            "edges": [[0, 1], [1, 2], [2, 3], [3, 4]]
+          },
+          "output": [0, 1, 2, 3, 4],
+          "description": "Linear DAG"
+        },
+        {
+          "id": 4,
+          "input": {
+            "nodes": 5,
+            "edges": [[0, 2], [1, 2], [2, 3], [3, 4]]
+          },
+          "output": [0, 1, 2, 3, 4],
+          "description": "DAG with multiple sources"
+        },
+        {
+          "id": 5,
+          "input": {
+            "nodes": 6,
+            "edges": [[0, 1], [0, 3], [1, 2], [2, 4], [3, 4], [4, 5]]
+          },
+          "output": [0, 1, 3, 2, 4, 5],
+          "description": "Complex DAG"
+        }
+      ]
+    },
+    {
+      "id": "graph_006",
+      "title": "Minimum Spanning Tree",
+      "description": "Find the minimum spanning tree using Kruskal's or Prim's algorithm",
+      "difficulty": "hard",
+      "timeLimit": 2500,
+      "memoryLimit": 256,
+      "testCases": [
+        {
+          "id": 1,
+          "input": {
+            "nodes": 4,
+            "edges": [[0, 1, 1], [0, 2, 4], [1, 2, 2], [1, 3, 5], [2, 3, 1]]
+          },
+          "output": 4,
+          "description": "Simple MST cost"
+        },
+        {
+          "id": 2,
+          "input": {
+            "nodes": 5,
+            "edges": [[0, 1, 2], [0, 3, 6], [1, 2, 3], [1, 3, 8], [1, 4, 5], [2, 4, 7], [3, 4, 1]]
+          },
+          "output": 11,
+          "description": "5 node MST"
+        },
+        {
+          "id": 3,
+          "input": {
+            "nodes": 3,
+            "edges": [[0, 1, 1], [1, 2, 2]]
+          },
+          "output": 3,
+          "description": "Linear MST"
+        },
+        {
+          "id": 4,
+          "input": {
+            "nodes": 4,
+            "edges": [[0, 1, 10], [1, 2, 20], [2, 3, 30], [3, 0, 40]]
+          },
+          "output": 60,
+          "description": "Cycle MST"
+        },
+        {
+          "id": 5,
+          "input": {
+            "nodes": 6,
+            "edges": [[0, 1, 1], [0, 2, 3], [1, 2, 3], [1, 3, 6], [2, 3, 4], [3, 4, 2], [3, 5, 5], [4, 5, 1]]
+          },
+          "output": 12,
+          "description": "Complex MST"
+        }
+      ]
+    }
+  ]
+}

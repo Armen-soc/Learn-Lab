@@ -1,0 +1,8 @@
+FROM python:3.12-alpine
+
+# Install Node.js, bash, and g++
+RUN apk add --no-cache nodejs bash g++
+
+WORKDIR /app
+
+# No entrypoint needed as dockerExecutor.js provides the command
