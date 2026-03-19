@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { api } from '../api'
 import I18N from '../i18n'
+import CodeEditor from '../components/CodeEditor'
+import { formatTime } from '../utils'
 
 export default function GraphProblemsPage() {
   const navigate = useNavigate()
@@ -149,10 +151,9 @@ function ProblemDetail({ problem, onBack }) {
   const [language, setLanguage] = useState('javascript')
   const [submitting, setSubmitting] = useState(false)
   const [result, setResult] = useState(null)
-  const [showTemplate, setShowTemplate] = useState(false)
 
-  const getTemplate = () => {
-    if (language === 'python') {
+  const getTemplate = (lang = language) => {
+    if (lang === 'python') {
       if (problem.id === 'graph_001') {
         return `from collections import deque
 
@@ -272,6 +273,13 @@ def bfs(nodes, edges, startNode):
     return '// Write your solution here';
   }
 
+  const handleLanguageChange = (newLang) => {
+    setLanguage(newLang);
+    if (!code || code === getTemplate(language) || code === '// Write your solution here') {
+      setCode(getTemplate(newLang));
+    }
+  }
+
   const handleSubmit = async () => {
     if (!code.trim()) {
       alert(I18N.t('common_enter_code'))
@@ -295,6 +303,10 @@ def bfs(nodes, edges, startNode):
     }
   }
 
+  useEffect(() => {
+    if (!code) setCode(getTemplate());
+  }, []);
+
   return (
     <div className="max-w-6xl mx-auto">
       <button
@@ -310,23 +322,38 @@ def bfs(nodes, edges, startNode):
           <h2 className="text-2xl font-bold text-gray-900 mb-2">{problem.title}</h2>
           <p className="text-gray-600 mb-4">{problem.description}</p>
           
-          <div className="space-y-3">
-            <div>
-              <h3 className="font-bold text-gray-900 mb-2">Constraints:</h3>
-              <ul className="text-gray-600 text-sm space-y-1">
-                <li>⏱️ Time Limit: {problem.timeLimit}ms</li>
-                <li>💾 Memory Limit: {problem.memoryLimit}MB</li>
-              </ul>
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Time Limit</p>
+                <p className="text-lg font-bold text-gray-900">{problem.timeLimit}ms</p>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Memory Limit</p>
+                <p className="text-lg font-bold text-gray-900">{problem.memoryLimit}MB</p>
+              </div>
             </div>
 
             {problem.testCases && problem.testCases.length > 0 && (
               <div>
-                <h3 className="font-bold text-gray-900 mb-2">Example Test Cases:</h3>
-                <div className="space-y-2">
+                <h3 className="font-bold text-gray-900 mb-3 flex items-center">
+                  <span className="mr-2">🧪</span> Example Test Cases
+                </h3>
+                <div className="space-y-3">
                   {problem.testCases.slice(0, 2).map((tc, idx) => (
-                    <div key={idx} className="bg-gray-50 p-3 rounded text-sm">
-                      <p className="font-mono text-gray-700">Input: {JSON.stringify(tc.input)}</p>
-                      <p className="font-mono text-gray-700">Output: {JSON.stringify(tc.output)}</p>
+                    <div key={idx} className="bg-gray-50 p-4 rounded-lg border border-gray-200 text-sm">
+                      <div className="mb-2">
+                        <span className="font-bold text-gray-700">Input:</span>
+                        <pre className="mt-1 font-mono text-blue-700 bg-white p-2 rounded border border-gray-100 overflow-x-auto">
+                          {JSON.stringify(tc.input, null, 2)}
+                        </pre>
+                      </div>
+                      <div>
+                        <span className="font-bold text-gray-700">Output:</span>
+                        <pre className="mt-1 font-mono text-green-700 bg-white p-2 rounded border border-gray-100 overflow-x-auto">
+                          {JSON.stringify(tc.output, null, 2)}
+                        </pre>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -336,99 +363,100 @@ def bfs(nodes, edges, startNode):
         </div>
 
         {/* Code Editor */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 flex flex-col">
-          <div className="mb-4 flex justify-between items-center">
-            <label className="block text-sm font-medium text-gray-700">Language:</label>
-            <button
-              onClick={() => setShowTemplate(!showTemplate)}
-              className="text-sm text-blue-600 hover:text-blue-700 underline"
-            >
-              {showTemplate ? 'Hide' : 'Show'} Template
-            </button>
-          </div>
-
-          <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 mb-4"
-          >
-            <option value="javascript">JavaScript</option>
-            <option value="python">Python</option>
-          </select>
-
-          {showTemplate && (
-            <div className="mb-4 bg-gray-50 border border-gray-300 rounded p-3 text-sm text-gray-700 font-mono max-h-60 overflow-y-auto">
-              <p className="font-bold mb-2">📋 Solution Template:</p>
-              <pre className="whitespace-pre-wrap text-xs">{getTemplate()}</pre>
-              <p className="text-xs text-gray-600 mt-2">Copy this and modify it with your solution</p>
-            </div>
-          )}
-
-          <div className="mb-4 flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Code:</label>
-            <textarea
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              placeholder="Write your solution here or click 'Show Template' for an example..."
-              className="w-full h-64 px-3 py-2 border border-gray-300 rounded-md font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+        <div className="flex flex-col space-y-4">
+          <div className="h-[500px]">
+            <CodeEditor 
+              value={code} 
+              onChange={setCode} 
+              language={language} 
+              onLanguageChange={handleLanguageChange} 
             />
           </div>
 
-          <div className="flex gap-2">
-            <button
-              onClick={() => setCode(getTemplate())}
-              className="flex-1 bg-gray-600 text-white py-2 rounded-md font-medium hover:bg-gray-700 transition"
-            >
-              📋 Paste Template
-            </button>
-            <button
-              onClick={handleSubmit}
-              disabled={submitting}
-              className="flex-1 bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 disabled:opacity-50 transition"
-            >
-              {submitting ? '⏳ Running...' : '▶️ Run Tests'}
-            </button>
-          </div>
+          <button
+            onClick={handleSubmit}
+            disabled={submitting}
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold text-lg hover:bg-blue-700 disabled:opacity-50 transition shadow-md flex items-center justify-center"
+          >
+            {submitting ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3"></div>
+                {I18N.t('graph_running')}
+              </>
+            ) : (
+              <>
+                <span className="mr-2">▶</span> {I18N.t('graph_run_tests')}
+              </>
+            )}
+          </button>
 
           {result && (
-            <div className={`mt-4 p-4 rounded-md border-2 ${
+            <div className={`p-6 rounded-lg border-2 ${
               result.allTestsPassed 
                 ? 'bg-green-50 border-green-200' 
                 : 'bg-red-50 border-red-200'
-            }`}>
-              <p className={`font-bold text-lg mb-2 ${
-                result.allTestsPassed 
-                  ? 'text-green-700' 
-                  : 'text-red-700'
-              }`}>
-                {result.allTestsPassed ? '✅ All Tests Passed!' : `❌ ${result.testsFailed} Test(s) Failed`}
-              </p>
-              <p className="text-sm mb-3">
-                {result.testsPassed}/{result.totalTests} tests passed ({result.passPercentage}%)
-              </p>
+            } shadow-sm animate-in fade-in slide-in-from-top-2 duration-300`}>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className={`font-bold text-xl ${
+                  result.allTestsPassed 
+                    ? 'text-green-700' 
+                    : 'text-red-700'
+                }`}>
+                  {result.allTestsPassed ? '✅ All Tests Passed!' : `❌ ${result.testsFailed} Test(s) Failed`}
+                </h3>
+                <div className="text-sm font-bold bg-white px-3 py-1 rounded-full border border-gray-200 shadow-sm">
+                  {result.testsPassed} / {result.totalTests} Passed
+                </div>
+              </div>
+              
+              <div className="w-full bg-gray-200 rounded-full h-3 mb-6 overflow-hidden border border-gray-100">
+                <div 
+                  className={`h-full transition-all duration-1000 ease-out ${result.allTestsPassed ? 'bg-green-500' : 'bg-red-500'}`}
+                  style={{ width: `${result.passPercentage}%` }}
+                ></div>
+              </div>
               
               {!result.allTestsPassed && result.testDetails && result.testDetails.length > 0 && (
-                <div className="space-y-2 text-sm">
-                  <p className="font-semibold text-gray-800">📋 Test Results:</p>
+                <div className="space-y-3">
+                  <p className="font-bold text-gray-800 text-sm uppercase tracking-wider">Detailed Results:</p>
                   {result.testDetails.map((test, idx) => (
-                    <div key={idx} className={`bg-white p-2 rounded border text-xs ${
-                      test.status === 'passed' ? 'border-green-200' : 'border-red-200'
+                    <div key={idx} className={`bg-white p-4 rounded-lg border shadow-sm transition-all ${
+                      test.status === 'passed' ? 'border-green-100 bg-green-50/30' : 'border-red-100'
                     }`}>
-                      <p className={`font-semibold ${test.status === 'passed' ? 'text-green-700' : 'text-red-700'}`}>
-                        Test {test.testId}: {test.description}
-                      </p>
-                      <p className="text-gray-700 mt-1">Status: <span className={test.status === 'passed' ? 'text-green-600' : 'text-red-600'}>{test.status.toUpperCase()}</span></p>
+                      <div className="flex justify-between items-center mb-2">
+                        <p className={`font-bold flex items-center ${test.status === 'passed' ? 'text-green-700' : 'text-red-700'}`}>
+                          <span className="mr-2">{test.status === 'passed' ? '✓' : '✗'}</span>
+                          Test {test.testId}: {test.description}
+                        </p>
+                        {test.executionTime && (
+                          <span className="text-xs font-mono text-gray-500 bg-gray-50 px-2 py-0.5 rounded border">
+                            {formatTime(test.executionTime)}
+                          </span>
+                        )}
+                      </div>
+                      
                       {test.status === 'failed' && (
-                        <div className="mt-2 bg-gray-50 p-1 rounded font-mono text-xs text-gray-700">
-                          <p>Expected: <code>{JSON.stringify(test.expected)}</code></p>
-                          <p>Got: <code>{JSON.stringify(test.actual)}</code></p>
+                        <div className="mt-3 space-y-2">
+                          {test.error && (
+                            <div className="p-2 bg-red-50 text-red-600 rounded text-xs font-mono border border-red-100">
+                              Error: {test.error}
+                            </div>
+                          )}
+                          <div className="grid grid-cols-2 gap-2">
+                            <div className="bg-gray-50 p-2 rounded border border-gray-100">
+                              <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Expected</p>
+                              <pre className="font-mono text-xs text-gray-700 overflow-x-auto">
+                                {JSON.stringify(test.expected)}
+                              </pre>
+                            </div>
+                            <div className="bg-gray-50 p-2 rounded border border-gray-100">
+                              <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Actual</p>
+                              <pre className="font-mono text-xs text-red-600 overflow-x-auto">
+                                {JSON.stringify(test.actual)}
+                              </pre>
+                            </div>
+                          </div>
                         </div>
-                      )}
-                      {test.error && (
-                        <p className="mt-1 text-red-600">⚠️ Error: {test.error}</p>
-                      )}
-                      {test.executionTime && (
-                        <p className="mt-1 text-gray-600">⏱️ Execution time: {test.executionTime}ms</p>
                       )}
                     </div>
                   ))}

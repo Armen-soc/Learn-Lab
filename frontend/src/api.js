@@ -2,7 +2,14 @@ const API_URL = 'http://localhost:4000/api'
 
 export const api = async (method, path, body = null) => {
   const token = localStorage.getItem('ll_token')
+  const lang = localStorage.getItem('ll_lang') || 'en'
   
+  let fullPath = path
+  if (method === 'GET') {
+    const separator = path.includes('?') ? '&' : '?'
+    fullPath = `${path}${separator}lang=${lang}`
+  }
+
   const options = {
     method,
     headers: { 'Content-Type': 'application/json' },
@@ -16,7 +23,7 @@ export const api = async (method, path, body = null) => {
     options.body = JSON.stringify(body)
   }
 
-  const res = await fetch(API_URL + path, options)
+  const res = await fetch(API_URL + fullPath, options)
   const data = await res.json().catch(() => ({}))
 
   if (res.status === 401) {

@@ -1,58 +1,228 @@
 [
   {
-    "id": "python-basics",
-    "title": "Python Basics",
-    "description": "Learn the fundamentals of Python programming",
+    "id": "graph-traversal",
+    "title": {
+      "en": "Graph Traversal",
+      "ru": "Обход графа",
+      "am": "Գրաֆի անցում"
+    },
+    "description": {
+      "en": "Learn how to traverse graphs using BFS and DFS",
+      "ru": "Узнайте, как обходить графы с помощью BFS и DFS",
+      "am": "Իմացեք, թե ինչպես անցնել գրաֆները՝ օգտագործելով BFS և DFS"
+    },
     "modules": [
       {
-        "id": "variables",
-        "title": "Variables & Data Types",
-        "content": "In Python, variables are created when you assign a value to them. Python is dynamically typed, meaning you don't need to declare variable types explicitly.\n\nPython has several built-in data types:\n- **int** — whole numbers: `x = 42`\n- **float** — decimal numbers: `pi = 3.14`\n- **str** — text strings: `name = \"Alice\"`\n- **bool** — True or False: `active = True`\n- **list** — ordered collection: `nums = [1, 2, 3]`\n- **dict** — key-value pairs: `user = {\"name\": \"Alice\", \"age\": 30}`\n\nYou can check the type of a variable using `type(variable)`.",
+        "id": "bfs",
+        "title": {
+          "en": "Breadth-First Search (BFS)",
+          "ru": "Поиск в ширину (BFS)",
+          "am": "Որոնում լայնությամբ (BFS)"
+        },
+        "content": {
+          "en": "Breadth-First Search (BFS) is a graph traversal algorithm that explores nodes level by level. It starts at a chosen source node and explores all its neighbors at the current depth before moving on to nodes at the next depth level.\n\n### Key Concepts\n- **Queue Data Structure**: BFS uses a First-In-First-Out (FIFO) queue to keep track of nodes to visit next.\n- **Visited Set**: To avoid cycles and infinite loops, it maintains a set of visited nodes.\n\n### Algorithm Steps:\n1. Start from a source node.\n2. Mark the source node as visited and add it to the queue.\n3. While the queue is not empty:\n   - Remove the first node from the queue.\n   - For each unvisited neighbor of the current node:\n     - Mark it as visited.\n     - Add it to the queue.\n\n### Complexity\n- **Time Complexity**: O(V + E), where V is the number of vertices and E is the number of edges.\n- **Space Complexity**: O(V) to store the visited set and the queue.\n\n### Use Cases\n- Finding the shortest path in unweighted graphs.\n- Level-order traversal in trees.\n- Social networking (finding friends of friends).",
+          "ru": "Поиск в ширину (Breadth-First Search, BFS) — это алгоритм обхода графа, который исследует узлы уровень за уровнем. Он начинается с выбранного исходного узла и исследует всех его соседей на текущей глубине, прежде чем переходить к узлам на следующем уровне глубины.\n\n### Ключевые концепции\n- **Очередь (Queue)**: BFS использует очередь (FIFO) для отслеживания узлов, которые нужно посетить следующими.\n- **Множество посещенных узлов**: Чтобы избежать циклов и бесконечных петель, алгоритм ведет список уже посещенных узлов.\n\n### Шаги алгоритма:\n1. Начните с исходного узла.\n2. Отметьте исходный узел как посещенный и добавьте его в очередь.\n3. Пока очередь не пуста:\n   - Извлеките первый узел из очереди.\n   - Для каждого непосещенного соседа текущего узла:\n     - Отметьте его как посещенный.\n     - Добавьте его в очередь.\n\n### Сложность\n- **Временная сложность**: O(V + E), где V — количество вершин, а E — количество ребер.\n- **Пространственная сложность**: O(V) для хранения множества посещенных узлов и очереди.\n\n### Случаи использования\n- Поиск кратчайшего пути в невзвешенных графах.\n- Обход дерева по уровням.\n- Социальные сети (поиск друзей друзей).",
+          "am": "Լայնությամբ որոնումը (Breadth-First Search, BFS) գրաֆի անցման ալգորիթմ է, որը հետազոտում է հանգույցները մակարդակ առ մակարդակ: Այն սկսվում է ընտրված սկզբնաղբյուր հանգույցից և հետազոտում է դրա բոլոր հարևաններին ընթացիկ խորության վրա՝ նախքան հաջորդ խորության մակարդակի հանգույցներին անցնելը:\n\n### Հիմնական հասկացություններ\n- **Հերթ (Queue)**: BFS-ն օգտագործում է «Առաջինը մտած, առաջինը դուրս եկած» (FIFO) հերթ՝ հաջորդ այցելվելիք հանգույցներին հետևելու համար:\n- **Այցելվածների բազմություն**: Ցիկլերից և անվերջ օղակներից խուսափելու համար այն պահպանում է այցելված հանգույցների բազմություն:\n\n### Ալգորիթմի քայլերը.\n1. Սկսեք սկզբնաղբյուր հանգույցից:\n2. Նշեք սկզբնաղբյուր հանգույցը որպես այցելված և ավելացրեք այն հերթին:\n3. Քանի դեռ հերթը դատարկ չէ.\n   - Հեռացրեք առաջին հանգույցը հերթից:\n   - Ընթացիկ հանգույցի յուրաքանչյուր չայցելված հարևանի համար.\n     - Նշեք այն որպես այցելված:\n     - Ավելացրեք այն հերթին:\n\n### Բարդություն\n- **Ժամանակային բարդություն**: O(V + E), որտեղ V-ն գագաթների քանակն է, իսկ E-ն՝ կողերի քանակը:\n- **Տարածքային բարդություն**: O(V)` այցելվածների բազմությունը և հերթը պահելու համար:\n\n### Օգտագործման դեպքեր\n- Կարճագույն ուղու գտնելը չկշռված գրաֆներում:\n- Ծառերի մակարդակային անցում:\n- Սոցիալական ցանցեր (ընկերների ընկերներին գտնելը):"
+        },
         "challenge": {
           "language": "python",
-          "instructions": "Write a Python script that:\n1. Creates a variable `name` with your name\n2. Creates a variable `age` with your age\n3. Creates a list `hobbies` with at least 3 hobbies\n4. Prints all three variables with descriptive labels",
-          "starterCode": "# Write your solution below\nname = \"\"\nage = 0\nhobbies = []\n\n# Print your variables\nprint(f\"Name: {name}\")\nprint(f\"Age: {age}\")\nprint(f\"Hobbies: {hobbies}\")\n",
-          "expectedOutput": "Name: <your name>\nAge: <your age>\nHobbies: [...]"
-        }
-      },
-      {
-        "id": "control-flow",
-        "title": "Control Flow",
-        "content": "Control flow determines the order in which code executes. Python uses indentation (4 spaces) to define code blocks.\n\n**If / elif / else:**\n```python\nscore = 85\nif score >= 90:\n    print(\"A\")\nelif score >= 80:\n    print(\"B\")\nelse:\n    print(\"C\")\n```\n\n**For loops** iterate over sequences:\n```python\nfor i in range(5):\n    print(i)  # prints 0 to 4\n```\n\n**While loops** run while a condition is True:\n```python\ncount = 0\nwhile count < 3:\n    print(count)\n    count += 1\n```",
-        "challenge": {
-          "language": "python",
-          "instructions": "Write a Python script that:\n1. Loops through numbers 1 to 20\n2. Prints 'Fizz' for multiples of 3\n3. Prints 'Buzz' for multiples of 5\n4. Prints 'FizzBuzz' for multiples of both\n5. Otherwise prints the number",
-          "starterCode": "# FizzBuzz Challenge\nfor i in range(1, 21):\n    # Your logic here\n    pass\n",
-          "expectedOutput": "1\n2\nFizz\n4\nBuzz\n..."
-        }
-      },
-      {
-        "id": "functions",
-        "title": "Functions",
-        "content": "Functions are reusable blocks of code defined with the `def` keyword.\n\n**Basic function:**\n```python\ndef greet(name):\n    return f\"Hello, {name}!\"\n\nprint(greet(\"Alice\"))  # Hello, Alice!\n```\n\n**Default parameters:**\n```python\ndef power(base, exponent=2):\n    return base ** exponent\n\nprint(power(3))     # 9\nprint(power(3, 3))  # 27\n```",
-        "challenge": {
-          "language": "python",
-          "instructions": "Write a function `analyze_list(numbers)` that returns a dict with keys: sum, average, min, max, count.\nTest it with [4, 8, 15, 16, 23, 42] and print each key-value pair.",
-          "starterCode": "def analyze_list(numbers):\n    # Your implementation here\n    pass\n\n# Test your function\nresult = analyze_list([4, 8, 15, 16, 23, 42])\nfor key, value in result.items():\n    print(f\"{key}: {value}\")\n",
-          "expectedOutput": "sum: 108\naverage: 18.0\nmin: 4\nmax: 42\ncount: 6"
+          "instructions": {
+            "en": "Implement BFS traversal. Given an adjacency list and a starting node, return a list of nodes in BFS order.",
+            "ru": "Реализуйте обход BFS. Учитывая список смежности и начальный узел, верните список узлов в порядке BFS.",
+            "am": "Իրականացնել BFS անցում: Տրված է հարևանության ցուցակը և սկզբնական հանգույցը, վերադարձնել հանգույցների ցուցակը BFS կարգով:"
+          },
+          "starterCode": "from collections import deque\n\ndef bfs(graph, start_node):\n    # graph is a dictionary mapping nodes to lists of neighbors\n    # Example: {0: [1, 2], 1: [0, 3], 2: [0], 3: [1]}\n    visited = set()\n    queue = deque([start_node])\n    visited.add(start_node)\n    result = []\n    \n    while queue:\n        node = queue.popleft()\n        result.append(node)\n        for neighbor in graph.get(node, []):\n            if neighbor not in visited:\n                visited.add(neighbor)\n                queue.append(neighbor)\n    return result",
+          "expectedOutput": "[0, 1, 2, 3]"
         }
       }
     ]
   },
   {
-    "id": "web-fundamentals",
-    "title": "Web Fundamentals",
-    "description": "HTML, CSS and JavaScript essentials",
+    "id": "shortest-path",
+    "title": {
+      "en": "Shortest Path Algorithms",
+      "ru": "Алгоритмы кратчайшего пути",
+      "am": "Կարճագույն ուղու ալգորիթմներ"
+    },
+    "description": {
+      "en": "Master Dijkstra, Bellman-Ford, and Floyd-Warshall",
+      "ru": "Освойте алгоритмы Дейкстры, Беллмана-Форда и Флойда-Уоршелла",
+      "am": "Տիրապետեք Դեյքստրայի, Բելման-Ֆորդի և Ֆլոյդ-Ուորշելի ալգորիթմներին"
+    },
     "modules": [
       {
-        "id": "html-structure",
-        "title": "HTML Structure",
-        "content": "HTML (HyperText Markup Language) is the backbone of every webpage. It uses **elements** wrapped in **tags** to structure content.\n\n**Basic page structure:**\n```html\n<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <title>My Page</title>\n  </head>\n  <body>\n    <h1>Hello World</h1>\n  </body>\n</html>\n```\n\n**Common elements:** headings (`h1`–`h6`), paragraphs (`p`), links (`a`), images (`img`), lists (`ul`, `ol`, `li`), divs (`div`).",
+        "id": "dijkstra",
+        "title": {
+          "en": "Dijkstra's Algorithm",
+          "ru": "Алгоритм Дейкстры",
+          "am": "Դեյքստրայի ալգորիթմ"
+        },
+        "content": {
+          "en": "Dijkstra's algorithm is used for finding the shortest paths between nodes in a graph, which may represent, for example, road networks.\n\n### Overview\nIt finds the shortest path from a source node to all other nodes in a weighted graph with **non-negative weights**.\n\n### How it works:\n1. Set distance to source as 0 and all other nodes as infinity.\n2. Use a priority queue to pick the node with the smallest distance.\n3. For each neighbor of the current node, calculate the distance through the current node.\n4. If this distance is smaller than the previously known distance, update it and add the neighbor to the priority queue.\n5. Repeat until all nodes are visited.\n\n### Complexity\n- **Time**: O((V + E) log V) with a binary heap.\n- **Space**: O(V) to store distances and priority queue.",
+          "ru": "Алгоритм Дейкстры используется для поиска кратчайших путей между узлами в графе, которые могут представлять, например, дорожные сети.\n\n### Обзор\nОн находит кратчайший путь от исходного узла ко всем остальным узлам в взвешенном графе с **неотрицательными весами**.\n\n### Как это работает:\n1. Установите расстояние до источника равным 0, а до всех остальных узлов — бесконечности.\n2. Используйте очередь с приоритетом, чтобы выбрать узел с наименьшим расстоянием.\n3. Для каждого соседа текущего узла вычислите расстояние через текущий узел.\n4. Если это расстояние меньше ранее известного, обновите его и добавьте соседа в очередь с приоритетом.\n5. Повторяйте, пока все узлы не будут посещены.\n\n### Сложность\n- **Время**: O((V + E) log V) с бинарной кучей.\n- **Пространство**: O(V) для хранения расстояний и очереди с приоритетом.",
+          "am": "Դեյքստրայի ալգորիթմն օգտագործվում է գրաֆի հանգույցների միջև կարճագույն ուղիները գտնելու համար, որոնք կարող են ներկայացնել, օրինակ, ճանապարհային ցանցեր:\n\n### Ընդհանուր նկարագիր\nԱյն գտնում է կարճագույն ուղին սկզբնաղբյուր հանգույցից դեպի բոլոր մյուս հանգույցները կշռված գրաֆում՝ **ոչ բացասական կշիռներով**:\n\n### Ինչպես է այն աշխատում.\n1. Սահմանեք հեռավորությունը սկզբնաղբյուրից որպես 0, իսկ մնացած բոլոր հանգույցներինը՝ անվերջություն:\n2. Օգտագործեք առաջնահերթությունների հերթ՝ ամենափոքր հեռավորությամբ հանգույցն ընտրելու համար:\n3. Ընթացիկ հանգույցի յուրաքանչյուր հարևանի համար հաշվարկեք հեռավորությունը ընթացիկ հանգույցի միջով:\n4. Եթե այս հեռավորությունն ավելի փոքր է, քան նախկինում հայտնի հեռավորությունը, թարմացրեք այն և ավելացրեք հարևանին առաջնահերթությունների հերթին:\n5. Կրկնեք մինչև բոլոր հանգույցները այցելվեն:\n\n### Բարդություն\n- **Ժամանակ**: O((V + E) log V) բինար կույտով (binary heap):\n- **Տարածք**: O(V)` հեռավորությունները և առաջնահերթությունների հերթը պահելու համար:"
+        },
         "challenge": {
-          "language": "javascript",
-          "instructions": "Write JavaScript that:\n1. Creates an array of 5 HTML tag names\n2. Loops through and prints each with its index\n3. Filters tags longer than 2 characters and prints the count",
-          "starterCode": "const tags = ['div', 'p', 'h1', 'a', 'section'];\n\n// Print each tag with index\n\n// Filter and count tags longer than 2 chars\n",
-          "expectedOutput": "0: div\n1: p\n2: h1\n3: a\n4: section\nLong tags: 3"
+          "language": "python",
+          "instructions": {
+            "en": "Implement Dijkstra's algorithm. Given a weighted adjacency list and a start node, return the shortest distance to each node.",
+            "ru": "Реализуйте алгоритм Дейкстры. Учитывая взвешенный список смежности и начальный узел, верните кратчайшее расстояние до каждого узла.",
+            "am": "Իրականացնել Դեյքստրայի ալգորիթմը: Տրված է կշռված հարևանության ցուցակը և սկզբնական հանգույցը, վերադարձնել կարճագույն հեռավորությունը յուրաքանչյուր հանգույցի համար:"
+          },
+          "starterCode": "import heapq\n\ndef dijkstra(graph, start_node, n):\n    # graph is {node: [(neighbor, weight)]}\n    distances = {i: float('inf') for i in range(n)}\n    distances[start_node] = 0\n    pq = [(0, start_node)]\n    \n    while pq:\n        curr_dist, u = heapq.heappop(pq)\n        if curr_dist > distances[u]: continue\n        for v, weight in graph.get(u, []):\n            if distances[u] + weight < distances[v]:\n                distances[v] = distances[u] + weight\n                heapq.heappush(pq, (distances[v], v))\n    return distances",
+          "expectedOutput": "{0: 0, 1: 3, 2: 1, 3: 4}"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cycle-detection",
+    "title": {
+      "en": "Cycle Detection",
+      "ru": "Обнаружение циклов",
+      "am": "Ցիկլերի հայտնաբերում"
+    },
+    "description": {
+      "en": "Learn to detect cycles in directed and undirected graphs",
+      "ru": "Научитесь обнаруживать циклы в ориентированных и неориентированных графах",
+      "am": "Սովորեք հայտնաբերել ցիկլերը ուղղորդված և չուղղորդված գրաֆներում"
+    },
+    "modules": [
+      {
+        "id": "detect-cycle",
+        "title": {
+          "en": "DFS for Cycle Detection",
+          "ru": "DFS для обнаружения циклов",
+          "am": "DFS ցիկլերի հայտնաբերման համար"
+        },
+        "content": {
+          "en": "Cycle detection is a fundamental problem in graph theory. A cycle exists if you can start at a node and follow edges to return to the same node.\n\n### Techniques\n- **Undirected Graphs**: Use DFS and keep track of the parent node. If you encounter a visited node that is not the parent, a cycle exists.\n- **Directed Graphs**: Use DFS and keep track of nodes in the current recursion stack. If you encounter a node already in the current recursion stack, a cycle exists.\n\n### Kahn's Algorithm (BFS)\nFor directed graphs, you can also use Kahn's algorithm for topological sorting. If the sorted order contains fewer nodes than the total nodes in the graph, it contains a cycle.",
+          "ru": "Обнаружение циклов — фундаментальная задача в теории графов. Цикл существует, если вы можете начать с узла и следовать по ребрам, чтобы вернуться к тому же узлу.\n\n### Методы\n- **Неориентированные графы**: Используйте DFS и отслеживайте родительский узел. Если вы встретите посещенный узел, который не является родительским, значит, существует цикл.\n- **Ориентированные графы**: Используйте DFS и отслеживайте узлы в текущем стеке рекурсии. Если вы встретите узел, который уже находится в стеке рекурсии, значит, существует цикл.\n\n### Алгоритм Кана (BFS)\nДля ориентированных графов вы также можете использовать алгоритм Кана для топологической сортировки. Если отсортированный порядок содержит меньше узлов, чем общее количество узлов в графе, значит, он содержит цикл.",
+          "am": "Ցիկլերի հայտնաբերումը գրաֆների տեսության հիմնարար խնդիր է: Ցիկլ գոյություն ունի, եթե կարող եք սկսել հանգույցից և հետևել կողերին՝ նույն հանգույց վերադառնալու համար:\n\n### Մեթոդներ\n- **Չուղղորդված գրաֆներ**: Օգտագործեք DFS և հետևեք ծնող հանգույցին: Եթե հանդիպում եք այցելված հանգույցի, որը ծնողը չէ, ապա ցիկլ գոյություն ունի:\n- **Ուղղորդված գրաֆներ**: Օգտագործեք DFS և հետևեք ընթացիկ ռեկուրսիայի ստեկի հանգույցներին: Եթե հանդիպում եք հանգույցի, որն արդեն ընթացիկ ռեկուրսիայի ստեկում է, ապա ցիկլ գոյություն ունի:\n\n### Կանի ալգորիթմ (BFS)\nՈւղղորդված գրաֆների համար կարող եք նաև օգտագործել Կանի ալգորիթմը տոպոլոգիական սորտավորման համար: Եթե սորտավորված կարգը պարունակում է ավելի քիչ հանգույցներ, քան գրաֆի հանգույցների ընդհանուր քանակը, ապա այն պարունակում է ցիկլ:"
+        },
+        "challenge": {
+          "language": "python",
+          "instructions": {
+            "en": "Write a function to detect a cycle in a directed graph.",
+            "ru": "Напишите функцию для обнаружения цикла в ориентированном графе.",
+            "am": "Գրել ֆունկցիա ուղղորդված գրաֆում ցիկլ հայտնաբերելու համար:"
+          },
+          "starterCode": "def has_cycle(n, edges):\n    adj = [[] for _ in range(n)]\n    for u, v in edges: adj[u].append(v)\n    \n    visited = [0] * n # 0=unvisited, 1=visiting, 2=visited\n    \n    def dfs(u):\n        if visited[u] == 1: return True\n        if visited[u] == 2: return False\n        visited[u] = 1\n        for v in adj[u]:\n            if dfs(v): return True\n        visited[u] = 2\n        return False\n        \n    for i in range(n):\n        if dfs(i): return True\n    return False",
+          "expectedOutput": "True"
+        }
+      }
+    ]
+  },
+  {
+    "id": "connected-components",
+    "title": {
+      "en": "Connected Components",
+      "ru": "Связные компоненты",
+      "am": "Կապակցված բաղադրիչներ"
+    },
+    "description": {
+      "en": "Find and count components in undirected and directed graphs",
+      "ru": "Найдите и подсчитайте компоненты в неориентированных и ориентированных графах",
+      "am": "Գտեք և հաշվեք բաղադրիչները չուղղորդված և ուղղորդված գրաֆներում"
+    },
+    "modules": [
+      {
+        "id": "components",
+        "title": {
+          "en": "Finding Components",
+          "ru": "Поиск компонентов",
+          "am": "Բաղադրիչների որոնում"
+        },
+        "content": {
+          "en": "A connected component of an undirected graph is a subgraph in which any two vertices are connected to each other by paths.\n\n### Algorithms\n- **Undirected Graphs**: Simple DFS or BFS can find all components. Every time you start a new search from an unvisited node, you've found a new component.\n- **Directed Graphs (SCC)**: Strongly Connected Components are more complex. A directed graph is strongly connected if there is a path in each direction between each pair of vertices. Popular algorithms include:\n  - **Kosaraju's Algorithm**\n  - **Tarjan's Algorithm**\n\n### Applications\n- Identifying clusters in social networks.\n- Analyzing network reliability.\n- Image processing (connected component labeling).",
+          "ru": "Связная компонента неориентированного графа — это подграф, в котором любые две вершины связаны друг с другом путями.\n\n### Алгоритмы\n- **Неориентированные графы**: Обычный DFS или BFS может найти все компоненты. Каждый раз, когда вы начинаете новый поиск из непосещенного узла, вы находите новую компоненту.\n- **Ориентированные графы (SCC)**: Сильно связные компоненты устроены сложнее. Ориентированный граф сильно связен, если между каждой парой вершин существует путь в обоих направлениях. Популярные алгоритмы включают:\n  - **Алгоритм Косарайю**\n  - **Алгоритм Тарьяна**\n\n### Применения\n- Идентификация кластеров в социальных сетях.\n- Анализ надежности сетей.\n- Обработка изображений (маркировка связных компонентов).",
+          "am": "Չուղղորդված գրաֆի կապակցված բաղադրիչը ենթագրաֆ է, որտեղ ցանկացած երկու գագաթ միացված են միմյանց ուղիներով:\n\n### Ալգորիթմներ\n- **Չուղղորդված գրաֆներ**: Պարզ DFS-ը կամ BFS-ը կարող են գտնել բոլոր բաղադրիչները: Ամեն անգամ, երբ սկսում եք նոր որոնում չայցելված հանգույցից, դուք գտել եք նոր բաղադրիչ:\n- **Ուղղորդված գրաֆներ (SCC)**: Ուժեղ կապակցված բաղադրիչներն ավելի բարդ են: Ուղղորդված գրաֆը ուժեղ կապակցված է, եթե գագաթների յուրաքանչյուր զույգի միջև կա ուղի յուրաքանչյուր ուղղությամբ: Հանրաճանաչ ալգորիթմներն են.\n  - **Կոսարայուի ալգորիթմ**\n  - **Տարյանի ալգորիթմ**\n\n### Կիրառություններ\n- Սոցիալական ցանցերում կլաստերների նույնականացում:\n- Ցանցի հուսալիության վերլուծություն:\n- Պատկերների մշակում (կապակցված բաղադրիչների մակնշում):"
+        },
+        "challenge": {
+          "language": "python",
+          "instructions": {
+            "en": "Count the number of connected components in an undirected graph.",
+            "ru": "Подсчитайте количество связных компонент в неориентированном графе.",
+            "am": "Հաշվել չուղղորդված գրաֆում կապակցված բաղադրիչների քանակը:"
+          },
+          "starterCode": "def count_components(n, edges):\n    adj = [[] for _ in range(n)]\n    for u, v in edges:\n        adj[u].append(v)\n        adj[v].append(u)\n    \n    visited = [False] * n\n    count = 0\n    \n    def dfs(u):\n        visited[u] = True\n        for v in adj[u]:\n            if not visited[v]: dfs(v)\n            \n    for i in range(n):\n        if not visited[i]:\n            count += 1\n            dfs(i)\n    return count",
+          "expectedOutput": "3"
+        }
+      }
+    ]
+  },
+  {
+    "id": "topological-sort",
+    "title": {
+      "en": "Topological Sorting",
+      "ru": "Топологическая сортировка",
+      "am": "Տոպոլոգիական սորտավորում"
+    },
+    "description": {
+      "en": "Linear ordering of vertices in directed acyclic graphs",
+      "ru": "Линейное упорядочивание вершин в ориентированных ациклических графах",
+      "am": "Գագաթների գծային կարգավորում ուղղորդված աչիկլիկ գրաֆներում"
+    },
+    "modules": [
+      {
+        "id": "topo-sort",
+        "title": {
+          "en": "Kahn's Algorithm",
+          "ru": "Алгоритм Кана",
+          "am": "Կանի ալգորիթմ"
+        },
+        "content": {
+          "en": "Topological sort for a Directed Acyclic Graph (DAG) is a linear ordering of vertices such that for every directed edge u → v, vertex u comes before v in the ordering.\n\n### Prerequisites\n- The graph must be a **DAG** (Directed Acyclic Graph).\n- If the graph has a cycle, topological sorting is impossible.\n\n### Kahn's Algorithm Steps:\n1. Calculate the in-degree for each vertex.\n2. Pick all vertices with in-degree 0 and add them to a queue.\n3. While the queue is not empty:\n   - Remove a vertex u from the queue and add it to the topological order.\n   - For each neighbor v of u, decrease its in-degree by 1.\n   - If v's in-degree becomes 0, add it to the queue.\n\n### Complexity\n- **Time**: O(V + E)\n- **Space**: O(V)",
+          "ru": "Топологическая сортировка для ориентированного ациклического графа (DAG) — это линейное упорядочивание вершин, такое что для каждого ориентированного ребра u → v вершина u предшествует v в упорядочивании.\n\n### Предварительные условия\n- Граф должен быть **DAG** (ориентированным ациклическим графом).\n- Если в графе есть цикл, топологическая сортировка невозможна.\n\n### Шаги алгоритма Кана:\n1. Вычислите степень входа (in-degree) для каждой вершины.\n2. Выберите все вершины со степенью входа 0 и добавьте их в очередь.\n3. Пока очередь не пуста:\n   - Извлеките вершину u из очереди и добавьте ее в топологический порядок.\n   - Для каждого соседа v вершины u уменьшите его степень входа на 1.\n   - Если степень входа v становится 0, добавьте его в очередь.\n\n### Сложность\n- **Время**: O(V + E)\n- **Пространство**: O(V)",
+          "am": "Տոպոլոգիական սորտավորումը ուղղորդված աչիկլիկ գրաֆի (DAG) համար գագաթների գծային կարգավորում է այնպես, որ յուրաքանչյուր u → v ուղղորդված կողի համար u գագաթը նախորդում է v-ին կարգավորման մեջ:\n\n### Նախապայմաններ\n- Գրաֆը պետք է լինի **DAG** (ուղղորդված աչիկլիկ գրաֆ):\n- Եթե գրաֆը ցիկլ ունի, տոպոլոգիական սորտավորումն անհնար է:\n\n### Կանի ալգորիթմի քայլերը.\n1. Հաշվարկել յուրաքանչյուր գագաթի մուտքային աստիճանը (in-degree):\n2. Ընտրել 0 մուտքային աստիճան ունեցող բոլոր գագաթները և ավելացնել դրանք հերթին:\n3. Քանի դեռ հերթը դատարկ չէ.\n   - Հեռացնել u գագաթը հերթից և ավելացնել այն տոպոլոգիական կարգին:\n   - u-ի յուրաքանչյուր v հարևանի համար նվազեցնել նրա մուտքային աստիճանը 1-ով:\n   - Եթե v-ի մուտքային աստիճանը դառնում է 0, ավելացնել այն հերթին:\n\n### Բարդություն\n- **Ժամանակ**: O(V + E)\n- **Տարածք**: O(V)"
+        },
+        "challenge": {
+          "language": "python",
+          "instructions": {
+            "en": "Implement topological sort using Kahn's algorithm.",
+            "ru": "Реализуйте топологическую сортировку с помощью алгоритма Кана.",
+            "am": "Իրականացնել տոպոլոգիական սորտավորում՝ օգտագործելով Կանի ալգորիթմը:"
+          },
+          "starterCode": "from collections import deque\n\ndef topo_sort(n, edges):\n    adj = [[] for _ in range(n)]\n    indegree = [0] * n\n    for u, v in edges:\n        adj[u].append(v)\n        indegree[v] += 1\n    \n    queue = deque([i for i in range(n) if indegree[i] == 0])\n    result = []\n    \n    while queue:\n        u = queue.popleft()\n        result.append(u)\n        for v in adj[u]:\n            indegree[v] -= 1\n            if indegree[v] == 0: queue.append(v)\n            \n    return result if len(result) == n else []",
+          "expectedOutput": "[0, 1, 2, 3]"
+        }
+      }
+    ]
+  },
+  {
+    "id": "minimum-spanning-tree",
+    "title": {
+      "en": "Minimum Spanning Tree",
+      "ru": "Минимальное остовное дерево",
+      "am": "Մինիմալ ծածկող ծառ"
+    },
+    "description": {
+      "en": "Connect all vertices with minimum total edge weight",
+      "ru": "Соедините все вершины с минимальным общим весом ребер",
+      "am": "Միացրեք բոլոր գագաթները կողերի մինիմալ ընդհանուր կշռով"
+    },
+    "modules": [
+      {
+        "id": "mst",
+        "title": {
+          "en": "Kruskal's Algorithm",
+          "ru": "Алгоритм Краскала",
+          "am": "Կրուսկալի ալգորիթմ"
+        },
+        "content": {
+          "en": "A Minimum Spanning Tree (MST) is a subset of the edges of a connected, edge-weighted undirected graph that connects all the vertices together, without any cycles and with the minimum possible total edge weight.\n\n### Kruskal's Algorithm\nIt is a greedy algorithm that finds an MST for a connected weighted graph.\n\n### Steps:\n1. Sort all the edges in non-decreasing order of their weight.\n2. Pick the smallest edge. Check if it forms a cycle with the spanning tree formed so far. If no cycle is formed, include this edge. Else, discard it.\n3. Repeat step#2 until there are (V-1) edges in the spanning tree.\n\n### Union-Find\nKruskal's algorithm typically uses the Disjoint Set Union (DSU) or Union-Find data structure to efficiently check for cycles.\n\n### Complexity\n- **Time**: O(E log E) or O(E log V) due to sorting edges.",
+          "ru": "Минимальное остовное дерево (MST) — это подмножество ребер связанного взвешенного неориентированного графа, которое соединяет все вершины без циклов и с минимально возможным общим весом ребер.\n\n### Алгоритм Краскала\nЭто жадный алгоритм, который находит MST для связанного взвешенного графа.\n\n### Шаги:\n1. Отсортируйте все ребра в порядке неубывания их веса.\n2. Выберите самое короткое ребро. Проверьте, образует ли оно цикл с уже сформированным остовным деревом. Если цикл не образуется, включите это ребро. В противном случае отбросьте его.\n3. Повторяйте шаг №2, пока в остовном дереве не окажется (V-1) ребер.\n\n### Union-Find\nАлгоритм Краскала обычно использует структуру данных Disjoint Set Union (DSU) или Union-Find для эффективной проверки на наличие циклов.\n\n### Сложность\n- **Время**: O(E log E) или O(E log V) из-за сортировки ребер.",
+          "am": "Մինիմալ ծածկող ծառը (MST) կապակցված, կշռված չուղղորդված գրաֆի կողերի ենթաբազմություն է, որը միացնում է բոլոր գագաթները միմյանց՝ առանց ցիկլերի և կողերի հնարավոր նվազագույն ընդհանուր կշռով:\n\n### Կրուսկալի ալգորիթմ\nԱյն ագահ (greedy) ալգորիթմ է, որը գտնում է MST կապակցված կշռված գրաֆի համար:\n\n### Քայլերը.\n1. Սորտավորել բոլոր կողերը ըստ իրենց կշիռների՝ չնվազող կարգով:\n2. Ընտրել ամենափոքր կողը: Ստուգել՝ արդյոք այն ցիկլ է կազմում մինչ այժմ ձևավորված ծածկող ծառի հետ: Եթե ցիկլ չի ձևավորվում, ներառել այս կողը: Հակառակ դեպքում՝ հեռացնել այն:\n3. Կրկնել քայլ 2-ը մինչև ծածկող ծառում լինեն (V-1) կողեր:\n\n### Union-Find\nԿրուսկալի ալգորիթմը սովորաբար օգտագործում է Disjoint Set Union (DSU) կամ Union-Find տվյալների կառուցվածքը՝ ցիկլերը արդյունավետորեն ստուգելու համար:\n\n### Բարդություն\n- **Ժամանակ**: O(E log E) կամ O(E log V)` կողերի սորտավորման պատճառով:"
+        },
+        "challenge": {
+          "language": "python",
+          "instructions": {
+            "en": "Find the total weight of the Minimum Spanning Tree using Kruskal's algorithm.",
+            "ru": "Найдите общий вес минимального остовного дерева с помощью алгоритма Краскала.",
+            "am": "Գտնել մինիմալ ծածկող ծառի ընդհանուր կշիռը՝ օգտագործելով Կրուսկալի ալգորիթմը:"
+          },
+          "starterCode": "def kruskal(n, edges):\n    # edges is a list of (u, v, weight)\n    edges.sort(key=lambda x: x[2])\n    parent = list(range(n))\n    \n    def find(i):\n        if parent[i] == i: return i\n        parent[i] = find(parent[i])\n        return parent[i]\n        \n    def union(i, j):\n        root_i, root_j = find(i), find(j)\n        if root_i != root_j:\n            parent[root_i] = root_j\n            return True\n        return False\n        \n    mst_weight = 0\n    edges_count = 0\n    for u, v, w in edges:\n        if union(u, v):\n            mst_weight += w\n            edges_count += 1\n            if edges_count == n - 1: break\n    return mst_weight",
+          "expectedOutput": "6"
         }
       }
     ]

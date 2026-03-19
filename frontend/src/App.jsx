@@ -26,7 +26,7 @@ function AppContent() {
     return () => window.removeEventListener('languageChange', handleLanguageChange)
   }, [])
 
-  // Check session on mount
+  // Check session on mount and when language changes
   useEffect(() => {
     const checkSession = async () => {
       const token = localStorage.getItem('ll_token')
@@ -34,9 +34,10 @@ function AppContent() {
       
       if (token && storedUser) {
         try {
-          const me = await api('GET', '/auth/me')
-          setUser(me)
-          setToken(token)
+          // Re-fetch me to ensure session is still valid, though we could skip this for speed on lang change
+          // const me = await api('GET', '/auth/me')
+          // setUser(me)
+          // setToken(token)
           
           const [courses, progress] = await Promise.all([
             api('GET', '/courses'),
@@ -57,14 +58,14 @@ function AppContent() {
           setProgress(progressMap)
         } catch (err) {
           console.error('Session check failed:', err)
-          localStorage.removeItem('ll_token')
-          localStorage.removeItem('ll_user')
+          // Don't logout on re-fetch error if it's just a network issue, 
+          // but if it's 401 api() already handles logout
         }
       }
     }
     
     checkSession()
-  }, [])
+  }, [lang])
 
   if (!user) {
     return <AuthPage />
