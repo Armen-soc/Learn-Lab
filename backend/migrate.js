@@ -18,10 +18,28 @@ async function migrateDatabase() {
         email VARCHAR(255) UNIQUE,
         password_hash VARCHAR(255),
         role VARCHAR(50) DEFAULT 'user',
+        is_verified BOOLEAN DEFAULT FALSE,
+        verification_token VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
+
+    // Check if columns exist (for existing tables)
+    const checkUserColumns = await pool.query(`
+      SELECT column_name FROM information_schema.columns
+      WHERE table_name = 'users';
+    `);
+    const existingUserColumns = checkUserColumns.rows.map(row => row.column_name);
+    
+    if (!existingUserColumns.includes('is_verified')) {
+      console.log('[MIGRATE] Adding is_verified to users');
+      await pool.query('ALTER TABLE users ADD COLUMN is_verified BOOLEAN DEFAULT FALSE');
+    }
+    if (!existingUserColumns.includes('verification_token')) {
+      console.log('[MIGRATE] Adding verification_token to users');
+      await pool.query('ALTER TABLE users ADD COLUMN verification_token VARCHAR(255)');
+    }
     console.log('[MIGRATE] ✓ Users table ready');
 
     // 2. Module progress table

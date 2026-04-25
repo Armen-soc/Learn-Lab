@@ -1,10 +1,12 @@
 'use strict';
 const express   = require('express');
 const bcrypt    = require('bcryptjs');
+const crypto    = require('crypto');
 const rateLimit = require('express-rate-limit');
-const { body, validationResult } = require('express-validator');
+const { body, query, validationResult } = require('express-validator');
 const { pool }       = require('../pool');
 const { signToken, requireAuth } = require('../middleware/auth');
+const { sendVerificationEmail } = require('../utils/email');
 
 const router = express.Router();
 
@@ -29,18 +31,101 @@ router.post('/register',
     const { name, email, password } = req.body;
     try {
       const hash = await bcrypt.hash(password, 12);
+      const verificationToken = crypto.randomBytes(32).toString('hex');
+      
       const result = await pool.query(
-        `INSERT INTO users (name, email, password_hash)
-         VALUES ($1, $2, $3)
-         RETURNING id, name, email, role, created_at`,
-        [name, email, hash]
+        `INSERT INTO users (name, email, password_hash, verification_token, is_verified)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING id, name, email`,
+        [name, email, hash, verificationToken, false]
       );
+      
       const user = result.rows[0];
-      const token = signToken({ id: user.id, email: user.email, role: user.role });
-      res.status(201).json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, since: user.created_at } });
+      
+      // Send verification email
+      try {
+        await sendVerificationEmail(email, name, verificationToken);
+      } catch (mailErr) {
+        console.error('Failed to send verification email:', mailErr);
+        // We continue anyway, but maybe inform the user or log it
+      }
+
+      res.status(201).json({ 
+        message: 'Registration successful. Please check your email to verify your account.',
+        user: { id: user.id, name: user.name, email: user.email } 
+      });
     } catch (err) {
       if (err.code === '23505') return res.status(409).json({ error: 'Email already registered' });
       throw err;
+    }
+  }
+);
+
+// Verify Email
+router.get('/verify-email',
+  [
+    query('token').notEmpty().withMessage('Token is required')
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ error: errors.array()[0].msg });
+
+    const { token } = req.query;
+    
+    try {
+      const result = await pool.query(
+        'UPDATE users SET is_verified = true, verification_token = NULL WHERE verification_token = $1 RETURNING id, email',
+        [token]
+      );
+
+      if (result.rowCount === 0) {
+        return res.status(400).json({ error: 'Invalid or expired verification token' });
+      }
+
+      res.json({ message: 'Email verified successfully. You can now log in.' });
+    } catch (err) {
+      console.error('Verification error:', err);
+      res.status(500).json({ error: 'Internal server error during verification' });
+    }
+  }
+);
+
+// Resend Verification
+router.post('/resend-verification',
+  authLimiter,
+  [
+    body('email').isEmail().normalizeEmail().withMessage('Valid email required')
+  ],
+  async (req, res) => {
+    const { email } = req.body;
+    
+    try {
+      const userResult = await pool.query(
+        'SELECT id, name, is_verified FROM users WHERE email = $1',
+        [email]
+      );
+
+      if (userResult.rowCount === 0) {
+        return res.json({ message: 'If that email exists, a new verification link has been sent.' });
+      }
+
+      const user = userResult.rows[0];
+      if (user.is_verified) {
+        return res.status(400).json({ error: 'Email is already verified' });
+      }
+
+      const newToken = crypto.randomBytes(32).toString('hex');
+      await pool.query(
+        'UPDATE users SET verification_token = $1 WHERE id = $2',
+        [newToken, user.id]
+      );
+
+      await sendVerificationEmail(email, user.name, newToken);
+
+      res.json({ message: 'If that email exists, a new verification link has been sent.' });
+    } catch (err) {
+      console.error('Resend error:', err);
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 );
@@ -58,7 +143,7 @@ router.post('/login',
 
     const { email, password } = req.body;
     const result = await pool.query(
-      'SELECT id, name, email, role, password_hash, created_at FROM users WHERE email = $1',
+      'SELECT id, name, email, role, password_hash, is_verified, created_at FROM users WHERE email = $1',
       [email]
     );
     const user = result.rows[0];
@@ -66,6 +151,13 @@ router.post('/login',
 
     const ok = await bcrypt.compare(password, user.password_hash);
     if (!ok) return res.status(401).json({ error: 'Invalid email or password' });
+
+    if (!user.is_verified) {
+      return res.status(403).json({ 
+        error: 'Email not verified. Please check your inbox or resend the verification email.',
+        unverified: true 
+      });
+    }
 
     const token = signToken({ id: user.id, email: user.email, role: user.role });
     res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, since: user.created_at } });

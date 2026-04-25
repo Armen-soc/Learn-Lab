@@ -118,95 +118,96 @@ export default function LearnPage() {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 px-4 lg:px-0">
       {/* Sidebar */}
-      <div className="lg:col-span-1 space-y-6">
-        <div className="bg-white rounded-lg border border-gray-200 p-4 sticky top-4 shadow-sm">
-          <h3 className="font-bold text-gray-900 mb-4 px-3 uppercase text-xs tracking-widest text-gray-500">
-            {I18N.t('side_courses')}
-          </h3>
-          
-          <div className="space-y-1 mb-6">
-            {courses.map((course) => {
-              const isSelected = selectedCourse === course.id
-              const isExpanded = expandedCourse === course.id
-              
-              return (
-                <div key={course.id} className="space-y-1">
-                  <button
-                    onClick={() => handleCourseClick(course.id)}
-                    className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center justify-between text-sm font-semibold transition-all duration-200 ${
-                      isSelected 
-                        ? 'text-blue-700 bg-blue-50 border-l-4 border-blue-600 pl-2' 
-                        : 'text-gray-700 hover:bg-gray-50 border-l-4 border-transparent'
-                    }`}
-                  >
-                    <span className="flex items-center">
-                      <span className="mr-2 opacity-50">{isExpanded ? '▾' : '▸'}</span>
-                      {course.title}
-                    </span>
-                  </button>
+      <div className="lg:col-span-1">
+        <div className="sticky top-4 space-y-6">
+          {/* Courses Section */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-md overflow-hidden">
+            <h3 className="font-black text-gray-500 mb-5 px-1 uppercase text-xs tracking-widest">
+              📚 {I18N.t('side_courses')}
+            </h3>
+            
+            <div className="space-y-1 mb-8 max-h-[50vh] overflow-y-auto pr-2">
+              {courses.map((course) => {
+                const isSelected = selectedCourse === course.id
+                const isExpanded = expandedCourse === course.id
+                
+                return (
+                  <div key={course.id} className="space-y-1">
+                    <button
+                      onClick={() => handleCourseClick(course.id)}
+                      className={`w-full text-left px-4 py-3 rounded-xl flex items-center justify-between text-sm font-bold transition-all duration-200 ${
+                        isSelected 
+                          ? 'text-blue-700 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-600 pl-3 shadow-sm' 
+                          : 'text-gray-700 hover:bg-gray-50 border-l-4 border-transparent hover:border-gray-300'
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className="text-lg transition-transform duration-300">{isExpanded ? '▾' : '▸'}</span>
+                        <span className="truncate">{course.title}</span>
+                      </span>
+                    </button>
 
-                  {isExpanded && course.modules && (
-                    <div className="ml-4 space-y-1 mt-1 border-l border-gray-100 pl-2 animate-in slide-in-from-top-1 duration-200">
-                      {course.modules.map((mod) => {
-                        const isDone = (progress?.[course.id] || new Set()).has(mod.id)
-                        const isActive = selectedModule?.moduleId === mod.id
-                        return (
-                          <button
-                            key={mod.id}
-                            onClick={() => handleModuleClick(course.id, mod.id)}
-                            className={`w-full text-left px-3 py-2 rounded-md text-xs transition-all duration-200 ${
-                              isActive 
-                                ? 'bg-blue-600 text-white font-bold shadow-sm' 
-                                : isDone 
-                                  ? 'text-green-700 font-medium hover:bg-green-50' 
-                                  : 'text-gray-500 hover:bg-gray-100'
-                            }`}
-                          >
-                            <span className="flex items-center">
-                              <span className="mr-2 text-base leading-none">
+                    {isExpanded && course.modules && (
+                      <div className="ml-3 mt-2 space-y-1 border-l-2 border-blue-200 pl-3 animate-in slide-in-from-top-1 duration-200">
+                        {course.modules.map((mod) => {
+                          const isDone = (progress?.[course.id] || new Set()).has(mod.id)
+                          const isActive = selectedModule?.moduleId === mod.id
+                          return (
+                            <button
+                              key={mod.id}
+                              onClick={() => handleModuleClick(course.id, mod.id)}
+                              className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-2 ${
+                                isActive 
+                                  ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md' 
+                                  : isDone 
+                                    ? 'text-green-700 bg-green-50 hover:bg-green-100 font-bold' 
+                                    : 'text-gray-600 hover:bg-gray-100'
+                              }`}
+                            >
+                              <span className="text-base leading-none flex-shrink-0">
                                 {isDone ? '✓' : '○'}
                               </span>
-                              {mod.title}
-                            </span>
-                          </button>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
+                              <span className="truncate flex-1">{mod.title}</span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
           </div>
-        </div>
 
-        {/* Graph Algorithms Section */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-          <h3 className="font-bold text-gray-900 mb-4 px-3 uppercase text-xs tracking-widest text-gray-500">
-            {I18N.t('side_graphs')}
-          </h3>
-          <div className="space-y-2">
-            <button
-              onClick={() => navigate('/learn/problems/all')}
-              className="w-full px-3 py-2.5 rounded-lg text-sm font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 transition-all shadow-sm border border-blue-100"
-            >
-              All Levels
-            </button>
-            <div className="grid grid-cols-1 gap-2">
-              {[
-                { key: 'easy', label: I18N.t('acc_easy'), color: 'bg-green-50 text-green-700 border-green-100' },
-                { key: 'medium', label: I18N.t('acc_medium'), color: 'bg-yellow-50 text-yellow-700 border-yellow-100' },
-                { key: 'hard', label: I18N.t('acc_hard'), color: 'bg-red-50 text-red-700 border-red-100' }
-              ].map(level => (
-                <button
-                  key={level.key}
-                  onClick={() => navigate(`/learn/problems/${level.key}`)}
-                  className={`px-3 py-2 rounded-lg text-xs font-bold ${level.color} border hover:opacity-80 transition-all shadow-sm`}
-                >
-                  {level.label}
-                </button>
-              ))}
+          {/* Graph Algorithms Section */}
+          <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200 p-5 shadow-md">
+            <h3 className="font-black text-gray-500 mb-5 px-1 uppercase text-xs tracking-widest">
+              🎯 Graph Challenges
+            </h3>
+            <div className="space-y-3">
+              <button
+                onClick={() => navigate('/learn/problems/all')}
+                className="w-full px-4 py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg active:scale-95"
+              >
+                All Levels
+              </button>
+              <div className="grid grid-cols-1 gap-2">
+                {[
+                  { key: 'easy', label: I18N.t('acc_easy'), color: 'from-green-500 to-green-600', lightColor: 'bg-green-50 text-green-700 border-green-200' },
+                  { key: 'medium', label: I18N.t('acc_medium'), color: 'from-yellow-500 to-yellow-600', lightColor: 'bg-yellow-50 text-yellow-700 border-yellow-200' },
+                  { key: 'hard', label: I18N.t('acc_hard'), color: 'from-red-500 to-red-600', lightColor: 'bg-red-50 text-red-700 border-red-200' }
+                ].map(level => (
+                  <button
+                    key={level.key}
+                    onClick={() => navigate(`/learn/problems/${level.key}`)}
+                    className={`px-4 py-2.5 rounded-lg text-xs font-bold border-2 transition-all shadow-sm hover:shadow-md active:scale-95 ${level.lightColor}`}
+                  >
+                    {level.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -220,66 +221,98 @@ export default function LearnPage() {
             <p className="text-gray-500 font-medium">{I18N.t('common_loading')}</p>
           </div>
         ) : selectedModule && moduleData ? (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-md animate-in fade-in zoom-in-95 duration-300">
-            <div className="p-8 border-b border-gray-200 bg-gray-50/50">
-              <div className="flex items-center text-xs text-gray-400 font-bold uppercase tracking-wider mb-3">
-                <button onClick={() => handleCourseClick(selectedModule.courseId)} className="hover:text-blue-600 transition">
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg animate-in fade-in zoom-in-95 duration-300">
+            {/* Header */}
+            <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-8 lg:p-12">
+              <div className="flex items-center text-xs text-blue-100 font-bold uppercase tracking-wider mb-4">
+                <button onClick={() => handleCourseClick(selectedModule.courseId)} className="hover:text-white transition duration-200">
                   {moduleData.course.title}
                 </button>
-                <span className="mx-2 text-gray-300">/</span>
-                <span className="text-blue-600">{moduleData.module.title}</span>
+                <span className="mx-3 text-blue-300">/</span>
+                <span className="text-blue-200">{moduleData.module.title}</span>
               </div>
-              <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">{moduleData.module.title}</h1>
+              <h1 className="text-5xl font-black text-white tracking-tight mb-2">{moduleData.module.title}</h1>
+              <p className="text-blue-100 text-lg font-medium max-w-2xl">{moduleData.module.description}</p>
             </div>
 
-            <div className="p-8 lg:p-12">
+            <div className="p-8 lg:p-16">
               {/* Progress Indicator */}
               {(progress?.[selectedModule.courseId] || new Set()).has(selectedModule.moduleId) && (
-                <div className="mb-10 p-5 bg-green-50 border border-green-200 rounded-xl text-green-800 flex items-center shadow-sm">
-                  <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center mr-4 flex-shrink-0 font-bold">✓</div>
+                <div className="mb-12 p-6 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl text-green-800 flex items-start shadow-sm">
+                  <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center mr-5 flex-shrink-0 font-bold text-lg shadow-lg">✓</div>
                   <div>
-                    <p className="font-bold text-lg">{I18N.t('common_success')}!</p>
-                    <p className="text-sm opacity-90">You have successfully mastered this module.</p>
+                    <p className="font-bold text-xl">{I18N.t('common_success')}!</p>
+                    <p className="text-sm opacity-90 mt-1">You have successfully mastered this module.</p>
                   </div>
                 </div>
               )}
 
-              <div className="prose prose-blue max-w-none text-gray-700">
-                <p className="text-xl leading-relaxed text-gray-600 mb-8 font-medium italic border-l-4 border-blue-100 pl-6">
-                  {moduleData.module.description}
-                </p>
-                
-                {moduleData.module.type === 'lesson' && moduleData.module.content && (
-                  <div className="mt-8 space-y-6">
-                    <div className="p-8 bg-white border border-gray-100 rounded-2xl shadow-sm leading-relaxed text-lg">
-                      <div className="prose-headings:text-gray-900 prose-headings:font-bold prose-p:text-gray-700">
-                        {moduleData.module.content.split('\n\n').map((para, i) => {
-                          if (para.startsWith('###')) {
-                            return <h3 key={i} className="text-2xl font-bold mt-8 mb-4 text-gray-900">{para.replace('###', '').trim()}</h3>
-                          }
-                          return <p key={i} className="mb-4 leading-relaxed">{para}</p>
-                        })}
-                      </div>
-                    </div>
+              {moduleData.module.type === 'lesson' && moduleData.module.content && (
+                <div className="mt-2 space-y-8">
+                  <div className="space-y-8 text-gray-700 leading-relaxed">
+                    {moduleData.module.content.split('\n\n').map((section, i) => {
+                      const lines = section.split('\n')
+                      return (
+                        <div key={i} className="space-y-4">
+                          {lines.map((line, lineIdx) => {
+                            if (line.startsWith('###')) {
+                              return (
+                                <div key={lineIdx} className="pt-6 mt-8 border-t border-gray-200">
+                                  <h3 className="text-3xl font-black text-gray-900 mb-6 tracking-tight">{line.replace('###', '').trim()}</h3>
+                                </div>
+                              )
+                            }
+                            if (line.startsWith('##')) {
+                              return (
+                                <h2 key={lineIdx} className="text-2xl font-bold text-blue-700 mt-10 mb-4">{line.replace('##', '').trim()}</h2>
+                              )
+                            }
+                            if (line.startsWith('**') && line.endsWith('**')) {
+                              return (
+                                <p key={lineIdx} className="text-lg font-bold text-gray-900 bg-blue-50 p-4 rounded-xl border-l-4 border-blue-500">
+                                  {line.replace(/\*\*/g, '')}
+                                </p>
+                              )
+                            }
+                            if (line.startsWith('- ')) {
+                              return (
+                                <div key={lineIdx} className="flex gap-4 items-start">
+                                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                                  <p className="text-base leading-relaxed text-gray-700">{line.replace('- ', '')}</p>
+                                </div>
+                              )
+                            }
+                            if (line.trim() === '') {
+                              return null
+                            }
+                            return (
+                              <p key={lineIdx} className="text-lg leading-relaxed text-gray-700 mb-4">
+                                {line}
+                              </p>
+                            )
+                          })}
+                        </div>
+                      )
+                    })}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
               {moduleData.module.type === 'challenge' && (
-                <div className="mt-12 pt-12 border-t border-gray-100">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-blue-200">⌨️</div>
+                <div className="mt-16 pt-16 border-t-2 border-gray-200">
+                  <div className="flex items-center gap-4 mb-10">
+                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl flex items-center justify-center text-3xl shadow-lg">⌨️</div>
                     <div>
-                      <h3 className="text-2xl font-bold text-gray-900">Coding Challenge</h3>
-                      <p className="text-gray-500 font-medium">Apply your knowledge to solve this problem</p>
+                      <h3 className="text-3xl font-black text-gray-900">Coding Challenge</h3>
+                      <p className="text-gray-500 font-medium mt-1">Apply your knowledge to solve this problem</p>
                     </div>
                   </div>
 
-                  <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-6 mb-8 text-blue-900 font-semibold text-lg shadow-sm">
-                    {moduleData.module.challenge?.instructions}
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl p-8 mb-10 text-blue-900 font-semibold text-lg leading-relaxed shadow-sm">
+                    <p className="whitespace-pre-wrap">{moduleData.module.challenge?.instructions}</p>
                   </div>
 
-                  <div className="h-[500px] mb-8 shadow-xl rounded-xl overflow-hidden ring-1 ring-gray-200">
+                  <div className="h-[600px] mb-10 shadow-2xl rounded-2xl overflow-hidden ring-1 ring-gray-200">
                     <CodeEditor
                       value={code}
                       onChange={setCode}
@@ -291,16 +324,16 @@ export default function LearnPage() {
                   <button
                     onClick={handleSubmitChallenge}
                     disabled={submitting}
-                    className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-xl hover:bg-blue-700 disabled:opacity-50 transition-all shadow-lg hover:shadow-blue-200 flex items-center justify-center gap-3 active:scale-[0.98]"
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-5 px-8 rounded-2xl font-bold text-lg hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl hover:shadow-blue-300/40 flex items-center justify-center gap-3 active:scale-[0.98]"
                   >
                     {submitting ? (
                       <>
                         <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Verifying Solution...
+                        <span>Verifying Solution...</span>
                       </>
                     ) : (
                       <>
-                        <span>Submit Solution</span>
+                        <span>✓ Submit Solution</span>
                         <span className="text-2xl">→</span>
                       </>
                     )}
@@ -310,19 +343,30 @@ export default function LearnPage() {
             </div>
           </div>
         ) : selectedCourse && courseData ? (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-md animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-700 p-8 flex items-end">
-              <h1 className="text-4xl font-black text-white tracking-tight">{courseData.title}</h1>
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Header with Gradient */}
+            <div className="h-40 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 p-8 lg:p-12 flex items-end relative overflow-hidden">
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full -mr-48 -mt-48"></div>
+              </div>
+              <h1 className="text-5xl font-black text-white tracking-tight relative z-10">{courseData.title}</h1>
             </div>
             
-            <div className="p-10">
-              <div className="max-w-3xl">
-                <h2 className="text-xl font-bold text-gray-400 uppercase tracking-widest mb-4">Course Overview</h2>
-                <p className="text-2xl text-gray-700 leading-relaxed font-medium mb-12">
+            <div className="p-8 lg:p-16 space-y-16">
+              {/* Description Section */}
+              <div>
+                <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">About This Course</h2>
+                <p className="text-2xl text-gray-700 leading-relaxed font-medium">
                   {courseData.description}
                 </p>
+              </div>
 
-                <h2 className="text-xl font-bold text-gray-400 uppercase tracking-widest mb-6">Learning Modules</h2>
+              {/* Divider */}
+              <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+
+              {/* Learning Modules Section */}
+              <div>
+                <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-8">Learning Modules</h2>
                 <div className="grid grid-cols-1 gap-4">
                   {courseData.modules.map((mod, idx) => {
                     const isDone = (progress?.[courseData.id] || new Set()).has(mod.id)
@@ -330,18 +374,20 @@ export default function LearnPage() {
                       <button
                         key={mod.id}
                         onClick={() => handleModuleClick(courseData.id, mod.id)}
-                        className="group flex items-center p-6 bg-gray-50 hover:bg-blue-50 rounded-2xl border border-gray-100 hover:border-blue-200 transition-all duration-300 text-left"
+                        className="group flex items-center gap-6 p-8 bg-gradient-to-br from-gray-50 to-gray-50 hover:from-blue-50 hover:to-indigo-50 rounded-2xl border-2 border-gray-100 hover:border-blue-300 transition-all duration-300 text-left shadow-sm hover:shadow-md"
                       >
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl mr-6 transition-all duration-300 ${
-                          isDone ? 'bg-green-500 text-white shadow-green-100 shadow-lg' : 'bg-white text-gray-400 group-hover:text-blue-600 shadow-sm'
+                        <div className={`w-14 h-14 rounded-xl flex items-center justify-center font-bold text-xl flex-shrink-0 transition-all duration-300 shadow-sm ${
+                          isDone 
+                            ? 'bg-gradient-to-br from-green-400 to-green-500 text-white shadow-lg shadow-green-200' 
+                            : 'bg-white text-gray-700 font-black group-hover:text-blue-600 border-2 border-gray-100 group-hover:border-blue-300'
                         }`}>
-                          {isDone ? '✓' : idx + 1}
+                          {isDone ? '✓' : String(idx + 1).padStart(2, '0')}
                         </div>
-                        <div className="flex-1">
-                          <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-700 transition-colors">{mod.title}</h3>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-700 transition-colors mb-1">{mod.title}</h3>
                           <p className="text-sm text-gray-500 font-medium">Click to start this module</p>
                         </div>
-                        <div className="text-gray-300 group-hover:text-blue-400 transition-all transform group-hover:translate-x-1 text-2xl">→</div>
+                        <div className="text-gray-300 group-hover:text-blue-500 transition-all transform group-hover:translate-x-2 text-2xl flex-shrink-0">→</div>
                       </button>
                     )
                   })}
@@ -350,27 +396,35 @@ export default function LearnPage() {
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-gray-200 p-16 text-center shadow-sm animate-in fade-in duration-700">
-            <div className="mb-8 text-7xl drop-shadow-sm">📚</div>
-            <h1 className="text-5xl font-black text-gray-900 mb-4 tracking-tight">
-              {I18N.t('welcome_title')}
-            </h1>
-            <p className="text-xl text-gray-500 mb-10 max-w-2xl mx-auto font-medium leading-relaxed">
-              {I18N.t('welcome_subtitle')}
-            </p>
-            <p className="text-lg text-blue-600 font-bold bg-blue-50 inline-block px-6 py-2 rounded-full mb-12">
-              {I18N.t('welcome_select')}
-            </p>
-            
-            <div className="pt-12 border-t border-gray-100">
-              <p className="text-gray-400 font-bold uppercase tracking-widest text-sm mb-6">Or dive into challenges</p>
-              <button
-                onClick={() => navigate('/learn/problems/all')}
-                className="bg-gray-900 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-black transition-all shadow-xl hover:shadow-gray-200 active:scale-95 flex items-center mx-auto gap-3"
-              >
-                <span>{I18N.t('graph_title')}</span>
-                <span className="text-2xl">↗</span>
-              </button>
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg p-16 text-center animate-in fade-in duration-700 relative">
+            {/* Decorative Elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div className="absolute top-0 right-0 w-80 h-80 bg-blue-400 rounded-full opacity-5 -mr-40 -mt-40"></div>
+              <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-400 rounded-full opacity-5 -ml-40 -mb-40"></div>
+            </div>
+
+            <div className="relative z-10">
+              <div className="mb-8 text-8xl drop-shadow-sm">📚</div>
+              <h1 className="text-5xl font-black text-gray-900 mb-6 tracking-tight">
+                {I18N.t('welcome_title')}
+              </h1>
+              <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto font-medium leading-relaxed">
+                {I18N.t('welcome_subtitle')}
+              </p>
+              <p className="text-lg text-blue-700 font-bold bg-blue-100 inline-block px-8 py-3 rounded-full mb-16 shadow-sm">
+                {I18N.t('welcome_select')}
+              </p>
+              
+              <div className="pt-12 border-t border-gray-200">
+                <p className="text-gray-400 font-bold uppercase tracking-widest text-sm mb-8">Explore Challenges</p>
+                <button
+                  onClick={() => navigate('/learn/problems/all')}
+                  className="bg-gradient-to-r from-gray-900 to-gray-800 text-white px-12 py-5 rounded-2xl font-bold text-lg hover:from-black hover:to-gray-900 transition-all shadow-xl hover:shadow-gray-400/30 active:scale-95 flex items-center mx-auto gap-3 hover:gap-4"
+                >
+                  <span>{I18N.t('graph_title')}</span>
+                  <span className="text-2xl transform group-hover:translate-x-1 transition-transform">↗</span>
+                </button>
+              </div>
             </div>
           </div>
         )}
