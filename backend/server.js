@@ -4,6 +4,7 @@ require('dotenv').config();
 const express   = require('express');
 const cors      = require('cors');
 const path      = require('path');
+const fs        = require('fs');
 const rateLimit = require('express-rate-limit');
 
 const authRoutes     = require('./routes/auth');
@@ -29,7 +30,12 @@ app.use(rateLimit({
 }));
 
 // Serve frontend
-app.use(express.static(path.join(__dirname, '../frontend')));
+const frontendPath = process.env.FRONTEND_PATH || 
+  (fs.existsSync(path.join(__dirname, '../frontend')) 
+    ? path.join(__dirname, '../frontend') 
+    : path.join(__dirname, '../../frontend'));
+
+app.use(express.static(frontendPath));
 
 // Health check
 app.get('/api/health', async (_req, res) => {
@@ -50,7 +56,12 @@ app.use('/api/graph',    graphRoutes);
 
 // SPA fallback
 app.get('*', (_req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+  const indexPath = path.join(frontendPath, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).send('Frontend not found. Please build the frontend first.');
+  }
 });
 
 // Error handler
