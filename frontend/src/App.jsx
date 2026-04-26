@@ -7,6 +7,7 @@ import AuthPage from './pages/AuthPage'
 import LearnPage from './pages/LearnPage'
 import AccountPage from './pages/AccountPage'
 import GraphProblemsPage from './pages/GraphProblemsPage'
+import VerifyEmailPage from './pages/VerifyEmailPage'
 import Navigation from './components/Navigation'
 import Toast from './components/Toast'
 
@@ -68,7 +69,12 @@ function AppContent() {
   }, [lang])
 
   if (!user) {
-    return <AuthPage />
+    return (
+      <Routes>
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="*" element={<AuthPage />} />
+      </Routes>
+    )
   }
 
   return (
@@ -81,6 +87,7 @@ function AppContent() {
           <Route path="/learn/problems" element={<GraphProblemsPage />} />
           <Route path="/learn/problems/:difficulty" element={<GraphProblemsPage />} />
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="*" element={<LearnPage />} />
         </Routes>
       </main>
