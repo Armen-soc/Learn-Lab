@@ -15,7 +15,7 @@ if (process.env.SENDGRID_API_KEY) {
  * @param {string} token - Verification token
  */
 async function sendVerificationEmail(email, name, token) {
-  const verificationUrl = `${process.env.VERIFICATION_URL_BASE || 'http://localhost:3000'}/verify-email?token=${token}`;
+  const verificationUrl = `${process.env.VERIFICATION_URL_BASE || 'https://learn-lab-2.onrender.com'}/verify-email?token=${token}`;
   
   const msg = {
     to: email,
