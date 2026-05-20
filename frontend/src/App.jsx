@@ -4,6 +4,7 @@ import { AppProvider, useAppContext } from './context'
 import { api } from './api'
 import I18N from './i18n'
 import AuthPage from './pages/AuthPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 import LearnPage from './pages/LearnPage'
 import AccountPage from './pages/AccountPage'
 import GraphProblemsPage from './pages/GraphProblemsPage'
@@ -72,6 +73,7 @@ function AppContent() {
     return (
       <Routes>
         <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="*" element={<AuthPage />} />
       </Routes>
     )

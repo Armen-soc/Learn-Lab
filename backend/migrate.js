@@ -20,6 +20,8 @@ async function migrateDatabase() {
         role VARCHAR(50) DEFAULT 'user',
         is_verified BOOLEAN DEFAULT FALSE,
         verification_token VARCHAR(255),
+        password_reset_token VARCHAR(255),
+        password_reset_expiry TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -39,6 +41,14 @@ async function migrateDatabase() {
     if (!existingUserColumns.includes('verification_token')) {
       console.log('[MIGRATE] Adding verification_token to users');
       await pool.query('ALTER TABLE users ADD COLUMN verification_token VARCHAR(255)');
+    }
+    if (!existingUserColumns.includes('password_reset_token')) {
+      console.log('[MIGRATE] Adding password_reset_token to users');
+      await pool.query('ALTER TABLE users ADD COLUMN password_reset_token VARCHAR(255)');
+    }
+    if (!existingUserColumns.includes('password_reset_expiry')) {
+      console.log('[MIGRATE] Adding password_reset_expiry to users');
+      await pool.query('ALTER TABLE users ADD COLUMN password_reset_expiry TIMESTAMP');
     }
     console.log('[MIGRATE] ✓ Users table ready');
 

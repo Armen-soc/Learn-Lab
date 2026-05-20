@@ -14,6 +14,8 @@ async function initDB() {
         email VARCHAR(255) UNIQUE,
         password_hash VARCHAR(255),
         role VARCHAR(50) DEFAULT 'user',
+        verification_token VARCHAR(255),
+        is_verified BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );

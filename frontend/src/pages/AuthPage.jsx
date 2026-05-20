@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { login, register } from '../api'
+import { login, register, forgotPassword } from '../api'
 import { useAppContext } from '../context'
 import I18N from '../i18n'
 import Toast from '../components/Toast'
@@ -59,6 +59,30 @@ export default function AuthPage() {
     }
   }
 
+  const handleForgotPassword = async (e) => {
+    e.preventDefault()
+    const email = e.target.email?.value
+
+    if (!email) {
+      setToast({ type: 'error', message: 'Please enter your email' })
+      return
+    }
+
+    setLoading(true)
+    try {
+      await forgotPassword(email)
+      setToast({ type: 'success', message: 'If that email exists, a password reset link has been sent.' })
+      // Reset form
+      e.target.reset()
+      // Return to login after 2 seconds
+      setTimeout(() => setTab('login'), 2000)
+    } catch (err) {
+      setToast({ type: 'error', message: err.message })
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg">
@@ -91,6 +115,16 @@ export default function AuthPage() {
             >
               {I18N.t('auth_create_account')}
             </button>
+            {/* <button
+              onClick={() => setTab('forgot')}
+              className={`flex-1 py-2 px-4 rounded font-medium transition text-sm ${
+                tab === 'forgot'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Forgot Password
+            </button> */}
           </div>
         </div>
 
@@ -121,6 +155,13 @@ export default function AuthPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setTab('forgot')}
+                  className="text-blue-600 text-sm hover:underline mt-2"
+                >
+                  Forgot password?
+                </button>
               </div>
               <button
                 type="submit"
@@ -176,6 +217,40 @@ export default function AuthPage() {
                 className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 disabled:opacity-50 transition"
               >
                 {loading ? 'Creating account...' : I18N.t('auth_create_btn')}
+              </button>
+            </form>
+          )}
+
+          {tab === 'forgot' && (
+            <form onSubmit={handleForgotPassword}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  required
+                />
+              </div>
+              <p className="text-sm text-gray-600 mb-6">
+                Enter the email address associated with your account, and we'll send you a link to reset your password.
+              </p>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 disabled:opacity-50 transition"
+              >
+                {loading ? 'Sending...' : 'Send Reset Link'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setTab('login')}
+                className="w-full mt-3 bg-gray-200 text-gray-700 py-2 rounded-md font-medium hover:bg-gray-300 transition"
+              >
+                Back to Login
               </button>
             </form>
           )}

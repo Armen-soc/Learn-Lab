@@ -6,7 +6,7 @@ const rateLimit = require('express-rate-limit');
 const { body, query, validationResult } = require('express-validator');
 const { pool }       = require('../pool');
 const { signToken, requireAuth } = require('../middleware/auth');
-const { sendVerificationEmail } = require('../utils/email');
+const { sendVerificationEmail, sendPasswordResetEmail } = require('../utils/email');
 
 const router = express.Router();
 
@@ -217,6 +217,86 @@ router.post('/change-password', requireAuth, authLimiter,
     const hash = await bcrypt.hash(newPassword, 12);
     await pool.query('UPDATE users SET password_hash = $1 WHERE id = $2', [hash, req.user.id]);
     res.json({ message: 'Password updated successfully' });
+  }
+);
+
+// Forgot Password - Request password reset
+router.post('/forgot-password',
+  authLimiter,
+  [
+    body('email').isEmail().normalizeEmail().withMessage('Valid email required')
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(422).json({ error: errors.array()[0].msg });
+
+    const { email } = req.body;
+    
+    try {
+      const userResult = await pool.query(
+        'SELECT id, name FROM users WHERE email = $1',
+        [email]
+      );
+
+      // Always return success for security (prevent email enumeration)
+      if (userResult.rowCount === 0) {
+        return res.json({ message: 'If that email exists, a password reset link has been sent.' });
+      }
+
+      const user = userResult.rows[0];
+      const resetToken = crypto.randomBytes(32).toString('hex');
+      const tokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour expiry
+
+      await pool.query(
+        'UPDATE users SET password_reset_token = $1, password_reset_expiry = $2 WHERE id = $3',
+        [resetToken, tokenExpiry, user.id]
+      );
+
+      await sendPasswordResetEmail(email, user.name, resetToken);
+
+      res.json({ message: 'If that email exists, a password reset link has been sent.' });
+    } catch (err) {
+      console.error('Forgot password error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
+
+// Reset Password - Using reset token to set new password
+router.post('/reset-password',
+  [
+    body('token').notEmpty().withMessage('Token is required'),
+    body('newPassword').isLength({ min: 6, max: 128 }).withMessage('Password must be 6–128 characters')
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(422).json({ error: errors.array()[0].msg });
+
+    const { token, newPassword } = req.body;
+    
+    try {
+      const result = await pool.query(
+        'SELECT id FROM users WHERE password_reset_token = $1 AND password_reset_expiry > NOW()',
+        [token]
+      );
+
+      if (result.rowCount === 0) {
+        return res.status(400).json({ error: 'Invalid or expired password reset token' });
+      }
+
+      const userId = result.rows[0].id;
+      const hash = await bcrypt.hash(newPassword, 12);
+
+      await pool.query(
+        'UPDATE users SET password_hash = $1, password_reset_token = NULL, password_reset_expiry = NULL WHERE id = $2',
+        [hash, userId]
+      );
+
+      res.json({ message: 'Password reset successfully. You can now log in with your new password.' });
+    } catch (err) {
+      console.error('Reset password error:', err);
+      res.status(500).json({ error: 'Internal server error during password reset' });
+    }
   }
 );
 

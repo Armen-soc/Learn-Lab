@@ -64,6 +64,14 @@ export const logout = () => {
   window.location.href = '/'
 }
 
+export const forgotPassword = async (email) => {
+  return api('POST', '/auth/forgot-password', { email })
+}
+
+export const resetPassword = async (token, newPassword) => {
+  return api('POST', '/auth/reset-password', { token, newPassword })
+}
+
 export const getCourses = () => api('GET', '/courses')
 export const getProgress = () => api('GET', '/progress')
 export const getGraphProblems = () => api('GET', '/progress/graph-problems')
